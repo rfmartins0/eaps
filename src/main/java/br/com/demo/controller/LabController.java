@@ -1,7 +1,5 @@
 package br.com.demo.controller;
 
-import java.util.Arrays;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -28,7 +26,6 @@ public class LabController {
 
 	@PostMapping(path = "/simian", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<LabResponseDto> examSimian(@RequestBody final String[] dna) {
-        System.out.println(Arrays.toString(dna));
         this.validate(dna);
 		boolean result = examService.isSimianSaveResult(dna);
 		LabResponseDto labResponseDto = new LabResponseDto();

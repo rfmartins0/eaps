@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ExamService {
-	
+
 	@Autowired
 	private LabService labService;
 
@@ -16,28 +16,28 @@ public class ExamService {
 		this.labService.saveLabExam(Arrays.toString(dna), result);
 		return result;
 	}
-	
+
 	public boolean isSimian(String[] dna) {
-		String[] patterns = { "AAAA", "TTTT", "CCCC", "GGGG" };
+		final String[] patterns = { "AAAA", "TTTT", "CCCC", "GGGG" };
 		for (String pattern : patterns) {
-			horizontal(dna, pattern);
-			vertical(dna, pattern);
-			diagonal(dna, pattern);
+			this.searchHorizontal(dna, pattern);
+			this.searchVertical(dna, pattern);
+			this.searchDiagonal(dna, pattern);
 		}
-		return  this.getCount() > 1;
+		return this.getCount() > 1;
 	}
 
-	private void horizontal(String[] dna, String pattern) {
+	private void searchHorizontal(String[] dna, String pattern) {
 		if (this.getCount() > 1) {
 			return;
 		}
 		for (String nitrogenBase : dna) {
-			KMPSearch(pattern, nitrogenBase);
+			tryKMPSearch(pattern, nitrogenBase);
 		}
 
 	}
 
-	private void diagonal(String[] args, String pattern) {
+	private void searchDiagonal(String[] args, String pattern) {
 		if (this.getCount() > 1) {
 			return;
 		}
@@ -45,34 +45,29 @@ public class ExamService {
 		for (int i = 0; i < args.length; i++) {
 			aux[i] = args[i].toCharArray();
 		}
-		System.out.println("Arrays " + Arrays.toString(aux[0]));
 		for (int s = 0; s < aux.length; s++) {
-			String a = "";
-
+		    StringBuilder line = new StringBuilder();
 			for (int i = s; i > -1; i--) {
-				a += aux[i][s - i];
+				line.append(aux[i][s - i]);
 			}
-			if (a.length() >= pattern.length()) {
-				KMPSearch(pattern, a);
-				System.out.println(a);
+			if (line.length() >= pattern.length()) {
+				tryKMPSearch(pattern, line.toString());
 			}
+		}
 
-		}
-		
-		for (int s=1; s<aux.length; s++) {
-			String a = "";
-		    for (int i=aux.length-1; i>=s; i--) {
-		        a += aux[i][s+aux.length-1-i];
-		    }
-		    if (a.length() >= pattern.length()) {
-				KMPSearch(pattern, a);
-				System.out.println(a);
+		for (int s = 1; s < aux.length; s++) {
+		    StringBuilder line = new StringBuilder();
+			for (int i = aux.length - 1; i >= s; i--) {
+				line.append(aux[i][s + aux.length - 1 - i]);
+			}
+			if (line.length() >= pattern.length()) {
+				tryKMPSearch(pattern, line.toString());
 			}
 		}
-		
+
 	}
 
-	private void vertical(String[] args, String pattern) {
+	private void searchVertical(String[] args, String pattern) {
 		if (this.getCount() > 1) {
 			return;
 		}
@@ -81,48 +76,47 @@ public class ExamService {
 			aux[i] = args[i].toCharArray();
 		}
 		for (int i = 0; i < args.length; i++) {
-			String a = "";
+		    StringBuilder line = new StringBuilder();
 			for (int x = 0; x < args.length; x++) {
-				a += aux[x][i];
+				line.append(aux[x][i]);
 			}
-			KMPSearch(pattern, a);
+			tryKMPSearch(pattern, line.toString());
 		}
 
 	}
 
 	private int count = 0;
-	
+
 	public int getCount() {
 		return count;
 	}
 
-	private int addCount() {
-		return count++;
+	private void addCount() {
+		count++;
 	}
 
-	private void KMPSearch(String pat, String txt) {
-		int M = pat.length();
-		int N = txt.length();
+	private void tryKMPSearch(String pattern, String adn) {
+		int patternLen = pattern.length();
+		int adnLen = adn.length();
 
-		int lps[] = new int[M];
+		int lps[] = new int[patternLen];
 		int j = 0;
 
-		computeLPSArray(pat, M, lps);
+		this.computeLPS(pattern, patternLen, lps);
 
 		int i = 0;
-		while (i < N) {
-			if (pat.charAt(j) == txt.charAt(i)) {
+		while (i < adnLen) {
+			if (pattern.charAt(j) == adn.charAt(i)) {
 				j++;
 				i++;
 			}
-			if (j == M) {
-				System.out.println("Found pattern " + "at index " + (i - j));
+			if (j == patternLen) {
 				this.addCount();
 				if (this.getCount() > 1) {
 					return;
 				}
 				j = lps[j - 1];
-			} else if (i < N && pat.charAt(j) != txt.charAt(i)) {
+			} else if (i < adnLen && pattern.charAt(j) != adn.charAt(i)) {
 				if (j != 0)
 					j = lps[j - 1];
 				else
@@ -131,7 +125,7 @@ public class ExamService {
 		}
 	}
 
-	private void computeLPSArray(String pat, int M, int lps[]) {
+	private void computeLPS(String pat, int M, int lps[]) {
 		int len = 0;
 		int i = 1;
 		lps[0] = 0;

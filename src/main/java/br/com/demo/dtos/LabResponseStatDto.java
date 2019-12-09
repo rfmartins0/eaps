@@ -2,30 +2,35 @@ package br.com.demo.dtos;
 
 import java.math.BigDecimal;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+
 public class LabResponseStatDto {
 	
-	private long count_mutant_dna;
+	private long mutantAdn;
 	
-	private long count_human_dna;
+	private long humanAdn;
 	
 	private BigDecimal ratio;
 	
-	public long getCount_mutant_dna() {
-		return count_mutant_dna;
+    @JsonGetter("count_mutant_dna")
+	public long getMutantAdn() {
+		return mutantAdn;
 	}
 
-	public void setCount_mutant_dna(long count_mutant_dna) {
-		this.count_mutant_dna = count_mutant_dna;
+	public void setMutantAdn(long mutantAdn) {
+		this.mutantAdn = mutantAdn;
 	}
 
-	public long getCount_human_dna() {
-		return count_human_dna;
+    @JsonGetter("count_human_dna")
+	public long getHumanAdn() {
+		return humanAdn;
 	}
 
-	public void setCount_human_dna(long count_human_dna) {
-		this.count_human_dna = count_human_dna;
+	public void setHumanAdn(long count_human_dna) {
+		this.humanAdn = count_human_dna;
 	}
 
+    @JsonGetter("ratio")
 	public BigDecimal getRatio() {
 		return ratio;
 	}

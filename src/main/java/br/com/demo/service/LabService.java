@@ -28,8 +28,8 @@ public class LabService {
 		long eaps = this.labRepository.countByEap(true);
 		long humans = this.labRepository.countByEap(false);
 		LabResponseStatDto labResponseStatDto = new LabResponseStatDto();
-		labResponseStatDto.setCount_human_dna(humans);
-		labResponseStatDto.setCount_mutant_dna(eaps);
+		labResponseStatDto.setHumanAdn(humans);
+		labResponseStatDto.setMutantAdn(eaps);
 		if (eaps > 0 && humans > 0) {
 			BigDecimal ratio = BigDecimal.valueOf(eaps).divide(BigDecimal.valueOf(humans));
 			labResponseStatDto.setRatio(ratio);
