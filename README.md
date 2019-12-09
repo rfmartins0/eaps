@@ -14,8 +14,10 @@ Para executar e modificar este projeto basta efetuar o "git clone", importar na 
 ### Heroku 
 
 Este sistema está disponível na plataforma Heroku.
+<br/>
 O endereço é: https://eaps.herokuapp.com
+<br/>
 Os endpoints disponíveis são:
-<br/><br/>
+<br/>
 https://eaps.herokuapp.com/simian 
 https://eaps.herokuapp.com/stats
