@@ -19,83 +19,72 @@ public class ExamService {
 
 	public boolean isSimian(String[] dna) {
 		final String[] patterns = { "AAAA", "TTTT", "CCCC", "GGGG" };
+		int count = 0;
 		for (String pattern : patterns) {
-			this.searchHorizontal(dna, pattern);
-			this.searchVertical(dna, pattern);
-			this.searchDiagonal(dna, pattern);
+			count += this.searchHorizontal(dna, pattern);
+			count += this.searchVertical(dna, pattern);
+			count += this.searchDiagonal(dna, pattern);
+			if (count > 1) {
+				return true;
+			}
 		}
-		return this.getCount() > 1;
+		return false;
 	}
 
-	private void searchHorizontal(String[] dna, String pattern) {
-		if (this.getCount() > 1) {
-			return;
-		}
+	private int searchHorizontal(String[] dna, String pattern) {
+		int count = 0;
 		for (String nitrogenBase : dna) {
-			tryKMPSearch(pattern, nitrogenBase);
+			count += tryKMPSearch(pattern, nitrogenBase);
 		}
-
+		return count;
 	}
 
-	private void searchDiagonal(String[] args, String pattern) {
-		if (this.getCount() > 1) {
-			return;
-		}
+	private int searchDiagonal(String[] args, String pattern) {
+		int count = 0;
 		char[][] aux = new char[args.length][args[0].length()];
 		for (int i = 0; i < args.length; i++) {
 			aux[i] = args[i].toCharArray();
 		}
 		for (int s = 0; s < aux.length; s++) {
-		    StringBuilder line = new StringBuilder();
+			StringBuilder line = new StringBuilder();
 			for (int i = s; i > -1; i--) {
 				line.append(aux[i][s - i]);
 			}
 			if (line.length() >= pattern.length()) {
-				tryKMPSearch(pattern, line.toString());
+				count += tryKMPSearch(pattern, line.toString());
 			}
 		}
 
 		for (int s = 1; s < aux.length; s++) {
-		    StringBuilder line = new StringBuilder();
+			StringBuilder line = new StringBuilder();
 			for (int i = aux.length - 1; i >= s; i--) {
 				line.append(aux[i][s + aux.length - 1 - i]);
 			}
 			if (line.length() >= pattern.length()) {
-				tryKMPSearch(pattern, line.toString());
+				count += tryKMPSearch(pattern, line.toString());
 			}
 		}
-
-	}
-
-	private void searchVertical(String[] args, String pattern) {
-		if (this.getCount() > 1) {
-			return;
-		}
-		char[][] aux = new char[args.length][args[0].length()];
-		for (int i = 0; i < args.length; i++) {
-			aux[i] = args[i].toCharArray();
-		}
-		for (int i = 0; i < args.length; i++) {
-		    StringBuilder line = new StringBuilder();
-			for (int x = 0; x < args.length; x++) {
-				line.append(aux[x][i]);
-			}
-			tryKMPSearch(pattern, line.toString());
-		}
-
-	}
-
-	private int count = 0;
-
-	public int getCount() {
 		return count;
 	}
 
-	private void addCount() {
-		count++;
+	private int searchVertical(String[] adn, String pattern) {
+		int count = 0;
+		char[][] aux = new char[adn.length][adn[0].length()];
+		for (int i = 0; i < adn.length; i++) {
+			aux[i] = adn[i].toCharArray();
+		}
+		for (int i = 0; i < adn.length; i++) {
+			StringBuilder line = new StringBuilder();
+			for (int x = 0; x < adn.length; x++) {
+				line.append(aux[x][i]);
+			}
+			count += tryKMPSearch(pattern, line.toString());
+		}
+		return count;
 	}
 
-	private void tryKMPSearch(String pattern, String adn) {
+	private int tryKMPSearch(String pattern, String adn) {
+		int count = 0;
 		int patternLen = pattern.length();
 		int adnLen = adn.length();
 
@@ -111,9 +100,9 @@ public class ExamService {
 				i++;
 			}
 			if (j == patternLen) {
-				this.addCount();
-				if (this.getCount() > 1) {
-					return;
+				count++;
+				if (count > 1) {
+					return count;
 				}
 				j = lps[j - 1];
 			} else if (i < adnLen && pattern.charAt(j) != adn.charAt(i)) {
@@ -123,6 +112,7 @@ public class ExamService {
 					i = i + 1;
 			}
 		}
+		return count;
 	}
 
 	private void computeLPS(String pat, int M, int lps[]) {
