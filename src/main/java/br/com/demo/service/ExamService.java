@@ -21,9 +21,9 @@ public class ExamService {
 		final String[] patterns = { "AAAA", "TTTT", "CCCC", "GGGG" };
 		int count = 0;
 		for (String pattern : patterns) {
-			count += this.numberOfOcurrencesHorizontal(dna, pattern);
-			count += this.numberOfOcurrencesVertical(dna, pattern);
-			count += this.numberOfOcurrencesDiagonal(dna, pattern);
+			count += this.findOcurrencesHorizontal(dna, pattern);
+			count += this.findOcurrencesVertical(dna, pattern);
+			count += this.findOcurrencesDiagonal(dna, pattern);
 			if (count > 1) {
 				return true;
 			}
@@ -31,7 +31,7 @@ public class ExamService {
 		return false;
 	}
 
-	private int numberOfOcurrencesHorizontal(String[] dna, String pattern) {
+	private int findOcurrencesHorizontal(String[] dna, String pattern) {
 		int count = 0;
 		for (String nitrogenBase : dna) {
 			count += tryKMPSearch(pattern, nitrogenBase);
@@ -39,7 +39,7 @@ public class ExamService {
 		return count;
 	}
 
-	private int numberOfOcurrencesDiagonal(String[] args, String pattern) {
+	private int findOcurrencesDiagonal(String[] args, String pattern) {
 		int count = 0;
 		char[][] aux = new char[args.length][args[0].length()];
 		for (int i = 0; i < args.length; i++) {
@@ -67,7 +67,7 @@ public class ExamService {
 		return count;
 	}
 
-	private int numberOfOcurrencesVertical(String[] adn, String pattern) {
+	private int findOcurrencesVertical(String[] adn, String pattern) {
 		int count = 0;
 		char[][] aux = new char[adn.length][adn[0].length()];
 		for (int i = 0; i < adn.length; i++) {
