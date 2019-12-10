@@ -24,8 +24,8 @@ public class ErrorHandler {
 	@ExceptionHandler(DataIntegrityViolationException.class)
 	@ResponseStatus(HttpStatus.CONFLICT)
 	public String validateExceptionHandler(final DataIntegrityViolationException ex) {
-		final ErrorDetails errorDetails = new ErrorDetails(ex.getMessage());
-		String json = new Gson().toJson("Não pode haver registros iguais. Detalhe: " + errorDetails);
+		final ErrorDetails errorDetails = new ErrorDetails("Não pode haver registros iguais. Detalhe: " + ex.getMessage());
+		String json = new Gson().toJson(errorDetails);
 		return json.toString();
 	}
 
