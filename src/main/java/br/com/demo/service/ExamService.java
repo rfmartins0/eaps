@@ -115,13 +115,13 @@ public class ExamService {
 		return count;
 	}
 
-	private void computeLPS(String pat, int M, int lps[]) {
+	private void computeLPS(String pattern, int total, int lps[]) {
 		int len = 0;
 		int i = 1;
 		lps[0] = 0;
 
-		while (i < M) {
-			if (pat.charAt(i) == pat.charAt(len)) {
+		while (i < total) {
+			if (pattern.charAt(i) == pattern.charAt(len)) {
 				len++;
 				lps[i] = len;
 				i++;
